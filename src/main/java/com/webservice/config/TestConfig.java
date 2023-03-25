@@ -10,10 +10,11 @@ import org.springframework.context.annotation.Profile;
 
 import com.webservice.entities.Category;
 import com.webservice.entities.Order;
+import com.webservice.entities.Product;
 import com.webservice.entities.User;
-import com.webservice.enums.OrderStatus;
 import com.webservice.repository.CategoryRepository;
 import com.webservice.repository.OrderRepository;
+import com.webservice.repository.ProductRepository;
 import com.webservice.repository.UserRepository;
 
 @Configuration
@@ -22,6 +23,9 @@ public class TestConfig implements CommandLineRunner {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private ProductRepository productRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -34,7 +38,13 @@ public class TestConfig implements CommandLineRunner {
 		Category cat1 = new Category(null, "Computer");
 		Category cat2 = new Category(null, "Book");
 		Category cat3 = new Category(null, "Eletronic");
-	
+		
+		Product p1 = new Product(null, "The Lord of the Ring", "Lorem ipsum dolor sit amet, consectetur", 90.5, null);
+		Product p2 = new Product(null, "Smart TV 62'", "Nulla eu impediet purus. Maecenas ante", 2190.5, null);
+		Product p3 = new Product(null, "Macbook Pro", "Nam, eleifend maximus tortor, at mollis", 12500.0, null);
+		Product p4 = new Product(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus", 100.99, null);
+		Product p5 = new Product(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus", 6250.00, null);
+		
 		User u1 = new User(null, "Edvaldo Leite", "eguilhermeleite@gmail.com","11962458794","12345", null);
 		User u2 = new User(null, "Luciene Leite", "lsilvaleite14@gmail.com", "11977114962", "12124", null);
 		User u3 = new User(null, "Davih Leite", "duilhermesilvaleite@gmail.com","11962458794","25456", null);
@@ -49,6 +59,7 @@ public class TestConfig implements CommandLineRunner {
 		Order o5 = new Order(null, Instant.parse("2019-03-27T06:36:12Z"),3,u1);
 		
 		categoryRepository.saveAll(Arrays.asList(cat1,cat2,cat3));
+		productRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
 		userRepository.saveAll(Arrays.asList(u1,u2,u3,u4,u5));
 		orderRepository.saveAll(Arrays.asList(o1,o2,o3,o4,o5));
 		
