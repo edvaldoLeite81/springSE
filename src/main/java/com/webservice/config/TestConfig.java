@@ -8,15 +8,20 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.webservice.entities.Category;
 import com.webservice.entities.Order;
 import com.webservice.entities.User;
 import com.webservice.enums.OrderStatus;
+import com.webservice.repository.CategoryRepository;
 import com.webservice.repository.OrderRepository;
 import com.webservice.repository.UserRepository;
 
 @Configuration
 @Profile("test")
 public class TestConfig implements CommandLineRunner {
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -26,6 +31,9 @@ public class TestConfig implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
+		Category cat1 = new Category(null, "Computer");
+		Category cat2 = new Category(null, "Book");
+		Category cat3 = new Category(null, "Eletronic");
 	
 		User u1 = new User(null, "Edvaldo Leite", "eguilhermeleite@gmail.com","11962458794","12345", null);
 		User u2 = new User(null, "Luciene Leite", "lsilvaleite14@gmail.com", "11977114962", "12124", null);
@@ -40,9 +48,10 @@ public class TestConfig implements CommandLineRunner {
 		Order o4 = new Order(null, Instant.parse("2019-06-12T08:02:52Z"),4,u3);
 		Order o5 = new Order(null, Instant.parse("2019-03-27T06:36:12Z"),3,u1);
 		
-		
+		categoryRepository.saveAll(Arrays.asList(cat1,cat2,cat3));
 		userRepository.saveAll(Arrays.asList(u1,u2,u3,u4,u5));
 		orderRepository.saveAll(Arrays.asList(o1,o2,o3,o4,o5));
+		
 		
 	}
 	
