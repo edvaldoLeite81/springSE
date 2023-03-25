@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webservice.entities.User;
-import com.webservice.repository.UserRepository;
 import com.webservice.services.UserService;
 
 @RestController

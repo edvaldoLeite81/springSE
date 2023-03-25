@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.webservice.entities.Order;
 import com.webservice.entities.User;
+import com.webservice.enums.OrderStatus;
 import com.webservice.repository.OrderRepository;
 import com.webservice.repository.UserRepository;
 
@@ -33,11 +34,11 @@ public class TestConfig implements CommandLineRunner {
 		User u5 = new User(null, "Godofredina das Neves", "fredina@gmail.com", "11978456985", "45678", null);
 		
 		
-		Order o1 = new Order(null, Instant.parse("2019-02-26T13:08:42Z"), u5);
-		Order o2 = new Order(null, Instant.parse("2019-04-17T09:45:41Z"), u4);
-		Order o3 = new Order(null, Instant.parse("2019-03-05T07:10:14Z"), u2);
-		Order o4 = new Order(null, Instant.parse("2019-06-12T08:02:52Z"), u3);
-		Order o5 = new Order(null, Instant.parse("2019-03-27T06:36:12Z"), u1);
+		Order o1 = new Order(null, Instant.parse("2019-02-26T13:08:42Z"),1, u5);
+		Order o2 = new Order(null, Instant.parse("2019-04-17T09:45:41Z"),1, u4);
+		Order o3 = new Order(null, Instant.parse("2019-03-05T07:10:14Z"),2,u2);
+		Order o4 = new Order(null, Instant.parse("2019-06-12T08:02:52Z"),4,u3);
+		Order o5 = new Order(null, Instant.parse("2019-03-27T06:36:12Z"),3,u1);
 		
 		
 		userRepository.saveAll(Arrays.asList(u1,u2,u3,u4,u5));
