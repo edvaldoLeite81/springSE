@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.webservice.entities.User;
 import com.webservice.repository.UserRepository;
@@ -21,9 +24,13 @@ public class UserService {
 	}
 	
 	// buscar por id
-	public User findById(Long id) {
-		Optional<User> objUser = userRepository.findById(id);
-		return objUser.get();
+	public ResponseEntity<User> findById(Long id) {
+		return userRepository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	}
+	
+	
+	public User insert(User user) {
+		return userRepository.save(user);
 	}
 
 }
