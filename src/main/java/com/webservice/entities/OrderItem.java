@@ -2,6 +2,7 @@ package com.webservice.entities;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.webservice.entities.pk.OrderItemPK;
 
 import jakarta.persistence.EmbeddedId;
@@ -19,7 +20,7 @@ public class OrderItem implements Serializable {
 
 	@EqualsAndHashCode.Include
 	@EmbeddedId
-	private OrderItemPK id;
+	private OrderItemPK id = new OrderItemPK();
 	
 	private Integer quantity;
 	
@@ -49,7 +50,7 @@ public class OrderItem implements Serializable {
 		this.price = price;
 	}
 
-
+	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
