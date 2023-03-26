@@ -39,11 +39,15 @@ public class TestConfig implements CommandLineRunner {
 		Category cat2 = new Category(null, "Book");
 		Category cat3 = new Category(null, "Eletronic");
 		
+		categoryRepository.saveAll(Arrays.asList(cat1,cat2,cat3));
+		
 		Product p1 = new Product(null, "The Lord of the Ring", "Lorem ipsum dolor sit amet, consectetur", 90.5, null);
 		Product p2 = new Product(null, "Smart TV 62'", "Nulla eu impediet purus. Maecenas ante", 2190.5, null);
 		Product p3 = new Product(null, "Macbook Pro", "Nam, eleifend maximus tortor, at mollis", 12500.0, null);
 		Product p4 = new Product(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus", 100.99, null);
 		Product p5 = new Product(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus", 6250.00, null);
+		
+		productRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
 		
 		User u1 = new User(null, "Edvaldo Leite", "eguilhermeleite@gmail.com","11962458794","12345", null);
 		User u2 = new User(null, "Luciene Leite", "lsilvaleite14@gmail.com", "11977114962", "12124", null);
@@ -51,6 +55,7 @@ public class TestConfig implements CommandLineRunner {
 		User u4 = new User(null, "Godofredo das Neves", "godo@gmail.com", "11978456985", "45678", null);
 		User u5 = new User(null, "Godofredina das Neves", "fredina@gmail.com", "11978456985", "45678", null);
 		
+		userRepository.saveAll(Arrays.asList(u1,u2,u3,u4,u5));
 		
 		Order o1 = new Order(null, Instant.parse("2019-02-26T13:08:42Z"),1, u5);
 		Order o2 = new Order(null, Instant.parse("2019-04-17T09:45:41Z"),1, u4);
@@ -58,14 +63,21 @@ public class TestConfig implements CommandLineRunner {
 		Order o4 = new Order(null, Instant.parse("2019-06-12T08:02:52Z"),4,u3);
 		Order o5 = new Order(null, Instant.parse("2019-03-27T06:36:12Z"),3,u1);
 		
-		categoryRepository.saveAll(Arrays.asList(cat1,cat2,cat3));
-		productRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
-		userRepository.saveAll(Arrays.asList(u1,u2,u3,u4,u5));
 		orderRepository.saveAll(Arrays.asList(o1,o2,o3,o4,o5));
+		
+		p1.getCategories().add(cat2);
+		p2.getCategories().add(cat3);
+		p2.getCategories().add(cat1);
+		p3.getCategories().add(cat1);
+		p4.getCategories().add(cat2);
+		p5.getCategories().add(cat1);
+		
+		productRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
+	
+		
 		
 		
 	}
-	
 	
 
 }
