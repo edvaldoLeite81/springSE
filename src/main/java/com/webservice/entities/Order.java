@@ -16,37 +16,33 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
-@Getter
-@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded =true )
 @Entity
 @Table(name = "tb_order")
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-ss'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
 	
 	private Integer orderStatus;
 	
+	@ManyToOne
+	@JoinColumn(name = "client_id")
+	private User client;
+	
+	
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<>();
-	
 	
 	public Order(Long id, Instant moment, Integer orderStatus, User client) {
 		super();
@@ -63,11 +59,30 @@ public class Order implements Serializable {
 		this.orderStatus = orderStatus.getCode();
 	}
 	
-	@ManyToOne
-	@JoinColumn(name = "client_id")
-	private User client;
 	
 	public Set<OrderItem> getItems(){
 		return items;
 	}
+
+	public User getClient() {
+		return client;
+	}
+
+	public void setClient(User client) {
+		this.client = client;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setItems(Set<OrderItem> items) {
+		this.items = items;
+	}
+	
+	
 }
