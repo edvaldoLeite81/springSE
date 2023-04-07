@@ -34,6 +34,7 @@ public class UserController {
 		return userService.findById(id);
 	}
 	
+	//inserir usuario
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public User insert(@RequestBody User user){
