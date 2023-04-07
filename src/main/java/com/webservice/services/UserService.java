@@ -34,6 +34,18 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
+	// atualizar
+	public ResponseEntity<User> update(Long id, User user){
+		if(!userRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		user.setId(id);
+		user = userRepository.save(user);
+
+		return ResponseEntity.ok(user);
+	}
+	
+	
 	// deletar usuario
 	public ResponseEntity<Void> delete(Long id){
 		
