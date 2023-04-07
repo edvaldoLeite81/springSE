@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.webservice.entities.User;
@@ -28,9 +29,19 @@ public class UserService {
 		return userRepository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 	
-	
+	// inserir usuario
 	public User insert(User user) {
 		return userRepository.save(user);
+	}
+	
+	// deletar usuario
+	public ResponseEntity<Void> delete(Long id){
+		
+		if(!userRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		userRepository.deleteById(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }
