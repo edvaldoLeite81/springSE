@@ -25,10 +25,22 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(apiError.getStatus()).body(apiError);
 		
 	}
+	
+	@org.springframework.web.bind.annotation.ExceptionHandler(DatabaseException.class)
+	public ResponseEntity<Object> handleDataBaseException(DatabaseException ex, WebRequest request) {
+		
+		//instante atual com menos 3 horas
+		//Instant moment = Instant.now().minus(3,ChronoUnit.HOURS);
+		Instant moment = Instant.now();
+		String message = ex.getMessage();
+		APIError apiError = new APIError(moment, HttpStatus.BAD_REQUEST.value(), message);
+		
+		return ResponseEntity.status(apiError.getStatus()).body(apiError);
+		
+	}
+	
+	
 
-	
-	
-	
 
 	// classe generica
 	private static class APIError {

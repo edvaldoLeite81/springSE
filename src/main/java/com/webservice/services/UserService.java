@@ -3,10 +3,12 @@ package com.webservice.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.webservice.entities.User;
+import com.webservice.exceptions.DatabaseException;
 import com.webservice.exceptions.ResourceNotFoundException;
 import com.webservice.repository.UserRepository;
 
@@ -35,7 +37,7 @@ public class UserService {
 
 	// atualizar
 	public ResponseEntity<User> update(Long id, User user) {
-		
+
 		if (!userRepository.existsById(id)) {
 			return ResponseEntity.notFound().build();
 		}
@@ -47,11 +49,22 @@ public class UserService {
 
 	// deletar usuario
 	public ResponseEntity<Void> delete(Long id) {
-
+		String notFound = "Resource With Id " + id + " Not Found";
+		String badRequest = "Resource " + id + " Cannot be deleted due to violating database rules";
+		
 		if (!userRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
+			
+			throw new ResourceNotFoundException(id, notFound);
+			//return ResponseEntity.notFound().build();
 		}
-		userRepository.deleteById(id);
+
+		try {
+			userRepository.deleteById(id);
+			
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(id, badRequest);
+		}
+		
 		return ResponseEntity.noContent().build();
 	}
 
