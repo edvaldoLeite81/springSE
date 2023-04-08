@@ -37,13 +37,14 @@ public class UserService {
 
 	// atualizar
 	public ResponseEntity<User> update(Long id, User user) {
-
+		String notFound = "Resource With Id " + id + " Not Found";
+		
 		if (!userRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
+			throw new ResourceNotFoundException(id, notFound);
+			// return ResponseEntity.notFound().build();
 		}
 		user.setId(id);
 		user = userRepository.save(user);
-
 		return ResponseEntity.ok(user);
 	}
 
@@ -51,20 +52,20 @@ public class UserService {
 	public ResponseEntity<Void> delete(Long id) {
 		String notFound = "Resource With Id " + id + " Not Found";
 		String badRequest = "Resource " + id + " Cannot be deleted due to violating database rules";
-		
+
 		if (!userRepository.existsById(id)) {
-			
+
 			throw new ResourceNotFoundException(id, notFound);
-			//return ResponseEntity.notFound().build();
+			// return ResponseEntity.notFound().build();
 		}
 
 		try {
 			userRepository.deleteById(id);
-			
+
 		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException(id, badRequest);
 		}
-		
+
 		return ResponseEntity.noContent().build();
 	}
 
