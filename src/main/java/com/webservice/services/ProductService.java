@@ -1,12 +1,13 @@
 package com.webservice.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.webservice.entities.Product;
+import com.webservice.exceptions.ResourceNotFoundException;
 import com.webservice.repository.ProductRepository;
 
 @Service
@@ -19,11 +20,15 @@ public class ProductService {
 	public List<Product> all() {
 		return productRepository.findAll();
 	}
-	
+
 	// buscar por id
-	public Product findById(Long id) {
-		Optional<Product> objProduct = productRepository.findById(id);
-		return objProduct.get();
+	public ResponseEntity<Product> findById(Long id) {
+		//Optional<Product> objProduct = productRepository.findById(id);
+		String message = "Resource With Id "+ id + " Not Found";
+		return productRepository.findById(id).map(ResponseEntity::ok).orElseThrow(()-> new ResourceNotFoundException(id, message));
+		
+		//return objProduct.get();
 	}
+
 
 }

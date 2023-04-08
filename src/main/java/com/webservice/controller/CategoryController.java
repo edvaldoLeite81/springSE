@@ -17,17 +17,18 @@ import com.webservice.services.CategoryService;
 public class CategoryController {
 
 	@Autowired
-	private CategoryService catergoryService;
+	private CategoryService categoryService;
 
 	@GetMapping
 	public ResponseEntity<List<Category>> findAll() {
-		List<Category> listCategory = catergoryService.all();
+		List<Category> listCategory = categoryService.all();
 		return ResponseEntity.ok().body(listCategory);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Category> findById(@PathVariable Long id) {
-		Category objCategory = catergoryService.findById(id);
-		return ResponseEntity.ok().body(objCategory);
+		return categoryService.findById(id);
 	}
+	
+	
 }
