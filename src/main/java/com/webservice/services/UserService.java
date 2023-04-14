@@ -38,7 +38,7 @@ public class UserService {
 	// atualizar
 	public ResponseEntity<User> update(Long id, User user) {
 		String notFound = "Resource With Id " + id + " Not Found";
-		
+
 		if (!userRepository.existsById(id)) {
 			throw new ResourceNotFoundException(id, notFound);
 			// return ResponseEntity.notFound().build();
@@ -56,7 +56,7 @@ public class UserService {
 		if (!userRepository.existsById(id)) {
 
 			throw new ResourceNotFoundException(id, notFound);
-			// return ResponseEntity.notFound().build();
+			//return ResponseEntity.notFound().build();
 		}
 
 		try {
