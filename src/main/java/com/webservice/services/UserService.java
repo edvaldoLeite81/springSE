@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.webservice.entities.User;
 import com.webservice.exceptions.DatabaseException;
@@ -19,13 +21,16 @@ public class UserService {
 	private UserRepository userRepository;
 
 	// buscar todos
-	public List<User> all() {
-		return userRepository.findAll();
+	public ResponseEntity<List<User>> all() {
+		List<User> listUser;
+		listUser = userRepository.findAll();
+		return ResponseEntity.ok().body(listUser);
 	}
 
 	// buscar por id
 	public ResponseEntity<User> findById(Long id) {
 		String message = "Resource With Id " + id + " Not Found";
+
 		return userRepository.findById(id).map(ResponseEntity::ok)
 				.orElseThrow(() -> new ResourceNotFoundException(id, message));
 	}
@@ -45,7 +50,7 @@ public class UserService {
 		}
 		user.setId(id);
 		user = userRepository.save(user);
-		return ResponseEntity.ok(user);
+	    return ResponseEntity.ok(user);
 	}
 
 	// deletar usuario
@@ -56,7 +61,7 @@ public class UserService {
 		if (!userRepository.existsById(id)) {
 
 			throw new ResourceNotFoundException(id, notFound);
-			//return ResponseEntity.notFound().build();
+			// return ResponseEntity.notFound().build();
 		}
 
 		try {

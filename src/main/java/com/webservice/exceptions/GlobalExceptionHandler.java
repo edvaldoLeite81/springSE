@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,24 +21,6 @@ import lombok.Setter;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-	// validacao de campos 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorResponse handleValidationException(MethodArgumentNotValidException ex) {
-
-		List<String> errors = ex.getBindingResult().getFieldErrors().stream()
-				.map(error -> error.getField() + ": " + error.getDefaultMessage()).collect(Collectors.toList());
-
-		ErrorResponse errorResponse = new ErrorResponse();
-
-		errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-		errorResponse.setMessage("validation failure");
-		errorResponse.setErrors(errors);
-
-		return errorResponse;
-		
-	}// validacao de campos
 
 	/*
 	 * @org.springframework.web.bind.annotation.ExceptionHandler(
@@ -60,6 +43,39 @@ public class GlobalExceptionHandler {
 	 * }// class Map
 	 */
 
+	// validacao de campos
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+
+		List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+				.map(error -> error.getField() + ": " + error.getDefaultMessage()).collect(Collectors.toList());
+
+		ErrorResponse errorResponse = new ErrorResponse();
+
+		errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+		errorResponse.setMessage("validation failure");
+		errorResponse.setErrors(errors);
+
+		return errorResponse;
+
+	}// validacao de campos TransactionSystemException
+	
+
+	// validacao de campos em update
+	@ExceptionHandler(TransactionSystemException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<Object> handleTransactionSystemException(TransactionSystemException ex) {
+		
+		Instant moment = Instant.now();
+		String message = "one or more fields are filled in incorrectly";
+		APIError apiError = new APIError(moment, HttpStatus.BAD_REQUEST.value(), message);
+
+		return ResponseEntity.status(apiError.getStatus()).body(apiError);
+
+	}// validacao de campos em update
+	
+
 	// recurso nao encontrado
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
@@ -75,7 +91,7 @@ public class GlobalExceptionHandler {
 	}// recurso nao encontrado
 	
 
-	//regra do bd 
+	// regra do bd
 	@ExceptionHandler(DatabaseException.class)
 	public ResponseEntity<Object> handleDataBaseException(DatabaseException ex, WebRequest request) {
 
@@ -87,10 +103,9 @@ public class GlobalExceptionHandler {
 
 		return ResponseEntity.status(apiError.getStatus()).body(apiError);
 
-	}//regra do bd 
+	}// regra do bd
+	
 
-	
-	
 	// classe para recurso nao encontrado e regra do bd
 	private static class APIError {
 
@@ -107,8 +122,7 @@ public class GlobalExceptionHandler {
 			this.status = status;
 			this.message = message;
 		}// fim do construtor
-		
-		
+
 		public Instant getMoment() {
 			return moment;
 		}
@@ -122,9 +136,9 @@ public class GlobalExceptionHandler {
 		}
 
 	}// classe para recurso nao encontrado e regra do bd
-
 	
-	//classe para validar campos
+
+	// classe para validar campos
 	@Getter
 	@Setter
 	@NoArgsConstructor

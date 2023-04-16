@@ -30,8 +30,7 @@ public class UserController {
 
 	@GetMapping
 	public ResponseEntity<List<User>> findAll() {
-		List<User> listUser = userService.all();
-		return ResponseEntity.ok().body(listUser);
+		return userService.all();
 	}
 
 	@GetMapping("/{id}")

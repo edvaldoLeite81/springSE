@@ -1,3 +1,4 @@
+
 package com.webservice.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
